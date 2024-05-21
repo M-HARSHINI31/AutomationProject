@@ -10,12 +10,13 @@ import org.testng.annotations.Test;
 
 import java.util.HashMap;
 
-public class CreateCase extends BaseTest {
-    private static final String SHEETNAME = "Cases";
+public class CreateTask extends BaseTest {
+    private static final String SHEETNAME = "Tasks";
     private final String TESTCASENAME = "TC_01";
     //private CasesPage casesPage;
     private LoginPage loginPage;
     private HomePage homePage;
+    private TasksPage tasksPage;
     private String userEmailId, userPwd;
     private HashMap<String, String> testData = new HashMap<>();
 
@@ -25,16 +26,17 @@ public class CreateCase extends BaseTest {
         // Get Test data
         userEmailId = configurationDetails.getUserName();
         userPwd = configurationDetails.getPassword();
-        testData = xlsFile.getExcelRowValuesIntoMapBasedOnKey(SHEETNAME, TESTCASENAME);
+//        testData = xlsFile.getExcelRowValuesIntoMapBasedOnKey(SHEETNAME, TESTCASENAME);
 
 
         // Initiate Pages
         loginPage = new LoginPage(getDriver());
         homePage = new HomePage(getDriver());
+        tasksPage = new TasksPage(getDriver());
         //casesPage = new CasesPage(getDriver());
     }
 
-    @Test(description = "Create Case")
+    @Test(description = "Create Task")
     public void testCaseFlow() throws Exception {
         try {
 
@@ -42,8 +44,9 @@ public class CreateCase extends BaseTest {
             loginPage.loginToApp(userEmailId, userPwd);
             ExtentTestManager.getTest().pass("Logged in to application");
 
-            // Step 1 :  Create Company
-            homePage.selectEntity(EntityPanel.Cases);
+            // Step 1 :  Create Task
+            homePage.selectEntity(EntityPanel.Tasks);
+            tasksPage.createTask("Harshini", "Qualizeal Employee");
             //casesPage.createCase(testData).verifyCase(testData.get("Title"));
 
         } catch (Exception e) {
@@ -54,7 +57,8 @@ public class CreateCase extends BaseTest {
 
     @AfterMethod
     public void tearDown() throws Exception {
-        homePage.selectEntity(EntityPanel.Cases);
+        homePage.selectEntity(EntityPanel.Tasks);
+        tasksPage.clickOnDelete("Harshini", "Delete");
         //casesPage.deleteAndPurgeCase(testData.get("Title"));
     }
 }
