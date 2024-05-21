@@ -65,6 +65,7 @@ public class BasePage {
     public static Logger getLogger() {
         return logger;
     }
+
     public String takePageScreenShot() {
         return this.scriptAction.takeScreenshotAndSave();
     }
@@ -143,7 +144,11 @@ public class BasePage {
         checkPopupIsDisplayed("Confirm Deletion");
         performActionsOnPopUp(popUpOperation);
         pageRefresh();
-        checkRecordNotDisplayed(sValue);
+        if (popUpOperation.equals("Delete")) {
+            checkRecordNotDisplayed(sValue);
+        } else {
+            checkRecordDisplayed(sValue);
+        }
     }
 
     /*Page Navigation Method*/
@@ -206,12 +211,12 @@ public class BasePage {
             }
         }
     }
-    public boolean check(String locator){
-        try{
+
+    public boolean check(String locator) {
+        try {
             driver.findElement(By.xpath(locator));
             return true;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
@@ -239,7 +244,7 @@ public class BasePage {
 //            scriptAction.clickElement(By.xpath(cBName));
             return true;
 
-        }catch (CustomException e){
+        } catch (CustomException e) {
             throw new CustomException(e);
         }
     }
@@ -272,7 +277,7 @@ public class BasePage {
             scriptAction.waitUntilElementIsVisible(errMessages, ApplicationConstants.MEDIUM_TIMEOUT); //wait until the error message is display
             Assert.assertTrue(sExpectedErrorMessage.contains(sActualErrorMessage), "error message is not matched");
             logger.info("Expected Error Message displayed : " + sExpectedErrorMessage);
-        }catch (CustomException e){
+        } catch (CustomException e) {
             logger.error("Expected Error message is not matched");
             throw new CustomException(e);
         }
@@ -371,8 +376,6 @@ public class BasePage {
         System.out.println(re);
         // scriptAction.waitUntilElementIsVisible(By.xpath(re),ApplicationConstants.MEDIUM_TIMEOUT);
     }
-
-
 
 
     //Usage selectToggleButton("Closed","ON") or selectToggleButton("Do not Text","OFF")

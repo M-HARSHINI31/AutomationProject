@@ -10,12 +10,13 @@ import org.testng.annotations.Test;
 
 import java.util.HashMap;
 
-public class CreateCase extends BaseTest {
+public class CreateTask extends BaseTest {
     private static final String SHEETNAME = "Cases";
     private final String TESTCASENAME = "TC_01";
     //private CasesPage casesPage;
     private LoginPage loginPage;
     private HomePage homePage;
+    private TasksPage taskspage;
     private String userEmailId, userPwd;
     private HashMap<String, String> testData = new HashMap<>();
 
@@ -31,7 +32,7 @@ public class CreateCase extends BaseTest {
         // Initiate Pages
         loginPage = new LoginPage(getDriver());
         homePage = new HomePage(getDriver());
-        //casesPage = new CasesPage(getDriver());
+        taskspage = new TasksPage(getDriver());
     }
 
     @Test(description = "Create Case")
@@ -43,8 +44,13 @@ public class CreateCase extends BaseTest {
             ExtentTestManager.getTest().pass("Logged in to application");
 
             // Step 1 :  Create Company
-            homePage.selectEntity(EntityPanel.Cases);
+            homePage.selectEntity(EntityPanel.Tasks);
             //casesPage.createCase(testData).verifyCase(testData.get("Title"));
+           taskspage.createTask("Suppu","Task Page",true);
+//            taskspage.deleteTask("Suppu","Delete");
+            homePage.selectEntity(EntityPanel.Tasks);
+            taskspage.deleteAction("Suppu","Cancel");
+
 
         } catch (Exception e) {
             throw new CustomException(e);
@@ -54,7 +60,8 @@ public class CreateCase extends BaseTest {
 
     @AfterMethod
     public void tearDown() throws Exception {
-        homePage.selectEntity(EntityPanel.Cases);
+        homePage.selectEntity(EntityPanel.Tasks);
+
         //casesPage.deleteAndPurgeCase(testData.get("Title"));
     }
 }
