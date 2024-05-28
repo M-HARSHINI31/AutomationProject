@@ -20,7 +20,7 @@ public class BasePage {
     protected final WebDriver driver;
 
     public String sScreenShotFilePath;
-
+    private static final By toastErrorMsg = By.xpath("//div[@class='content']//p");
     private static final By btnNext = By.xpath("//a[@class='icon item']");
     private static final By rubbishBinIcon = By.xpath("//button[@class='ui basic button item']");
     private static final By publicButton = By.xpath("//label[text()='Access']/parent::div//button[@class='ui small fluid positive toggle button']");
@@ -368,7 +368,7 @@ public class BasePage {
 
     public void saveButton() throws Exception {
         scriptAction.waitUntilElementIsVisible(saveBtn, ApplicationConstants.MEDIUM_TIMEOUT);
-        scriptAction.clickElement(saveBtn);
+        scriptAction.clickAndWaitElement(saveBtn, 500);
     }
 
     public void editRecordVerification(String labelName, String sValue) {
@@ -382,5 +382,16 @@ public class BasePage {
     public boolean selectToggleButton(String sToggleLabel, String sOperation) {
         //sOperation = "ON","OFF"
         return true;
+    }
+    public void verifyToastMessage(String expectedMessage) throws Exception {
+        try {
+            scriptAction.waitUntilElementIsVisible(toastErrorMsg,ApplicationConstants.SHORT_TIMEOUT);//wait until the error message is display
+            String sActualErrorMessage = scriptAction.getText(toastErrorMsg);
+            Assert.assertTrue(expectedMessage.contains(sActualErrorMessage), "error message is not matched");
+            logger.info("Expected Error Message displayed : " + expectedMessage);
+        }catch (CustomException e){
+            logger.error("Expected Error message is not matched");
+            throw new CustomException(e);
+        }
     }
 }

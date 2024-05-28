@@ -59,7 +59,7 @@ public class WebUtil {
 
     public void clearAndInputText(By locator, String sText) {
         WebElement ele = getWebElement(locator);
-        ele.clear();
+        ele.sendKeys(Keys.CONTROL, "A", Keys.BACK_SPACE);
         ele.sendKeys(sText);
     }
 
